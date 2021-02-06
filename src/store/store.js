@@ -1,4 +1,4 @@
-export default function createStore(initialState = [], reducer) {
+export default function createStore(initialState, reducer) {
   let state = initialState;
 
   const listeners = [];
@@ -14,7 +14,7 @@ export default function createStore(initialState = [], reducer) {
     publish();
   };
 
-  const getState = () => [...state];
+  const getState = () => state;
 
   const subscribe = (subscriber) => listeners.push(subscriber);
 

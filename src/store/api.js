@@ -1,26 +1,38 @@
-const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com/api/";
+import { GET, POST, PUT } from "../constants/HttpMethod.js";
 
-export default function api(method, uri) {
-  const option = {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    // body: JSON.stringify(body),
-  };
+const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com/api";
 
-  return fetch(`${BASE_URL}${uri}`, option)
+const option = (method, message = {}) => {
+  Object.values(message).length > 0
+    ? {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(message),
+      }
+    : {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+};
+
+const api = async (method, url, message) => {
+  const requestResponse = await fetch(url, option(method, message))
     .then((data) => {
       if (!data.ok) {
         throw new Error(data.status);
       }
       return data.json();
     })
-    .then((post) => {
-      console.log(post);
-      return post;
-    })
     .catch((error) => {
       console.log(error);
     });
-}
+  return requestResponse;
+};
+
+export const repository = {
+  getAllUsers: () => api(GET, `${BASE_URL}/users`),
+};

@@ -1,14 +1,8 @@
-import { GET } from "../constants/HttpMethod.js";
-import api from "../store/api.js";
-import createStore from "../store/store.js";
-import reducer from "../store/reducer.js";
-
-export default async function user() {
+export default async function user(store) {
   const userDiv = document.getElementById("user-list");
   const userCreateButton = document.querySelector(".user-create-button");
 
-  // const store = createStore()
-  const state = await api("GET", "users");
+  const state = await store.getState();
 
   const onUserCreateHandler = () => {
     const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
@@ -17,10 +11,8 @@ export default async function user() {
   const onClickUser = () =>
     userDiv.addEventListener("click", (e) => {
       if (e.target.classList.contains("user-create-button")) {
-        // 생성버튼
         onUserCreateHandler();
       } else {
-        // 유저버튼
         const userId = e.target.dataset.userId;
         render(userId);
       }
