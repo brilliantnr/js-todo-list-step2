@@ -1,3 +1,7 @@
+import userList from "../components/UserList.js";
+import userAddButton from "../components/UserAddButton.js";
+import todoList from "../components/TodoList.js";
+
 export default async function user(store) {
   const userDiv = document.getElementById("user-list");
   const userCreateButton = document.querySelector(".user-create-button");
@@ -18,23 +22,11 @@ export default async function user(store) {
       }
     });
 
-  const appendUserList = (userId = "") => {
-    const userList = state.map((user) => {
-      return `<button class="ripple ${
-        user._id === userId ? "active" : ""
-      }" data-user-id=${user._id}>${user.name}</button>`;
-    });
-    userDiv.innerHTML = userList.join("\n");
-  };
-
-  const appendAddUserButton = () => {
-    const btnTemplete = `<button class="ripple user-create-button">+ 유저 생성</button>`;
-    userDiv.insertAdjacentHTML("beforeend", btnTemplete);
-  };
-
-  const render = (userId = "") => {
-    appendUserList(userId);
-    appendAddUserButton();
+  const render = async (userId = "") => {
+    const id = userId === "" ? state[0]._id : userId;
+    await userList(id);
+    await userAddButton();
+    await todoList(id);
   };
 
   onClickUser();
