@@ -19,8 +19,7 @@ const option = (method, message = {}) => {
       };
 };
 
-const api = async (method, url, message) => {
-  const requestResponse = await fetch(url, option(method, message))
+const api = (method, url, message) => fetch(url, option(method, message))
     .then((data) => {
       if (!data.ok) {
         throw new Error(data.status);
@@ -30,8 +29,6 @@ const api = async (method, url, message) => {
     .catch((error) => {
       console.log(error);
     });
-  return requestResponse;
-};
 
 export const repository = {
   getAllUsers: () => api(GET, `${BASE_URL}/users`),

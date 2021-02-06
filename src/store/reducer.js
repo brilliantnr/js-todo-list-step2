@@ -1,4 +1,3 @@
-import { GET, POST } from "../constants/HttpMethod.js";
 import { repository } from "./api.js";
 import createStore from "./store.js";
 
@@ -9,11 +8,10 @@ export const getAllUsers = () => ({ type: GET_USERS });
 
 const initialState = [];
 
-async function reducer(state = initialState, action) {
+function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_USERS:
-      const result = await repository.getAllUsers();
-      return result;
+      return repository.getAllUsers();
 
     default:
       return state;
