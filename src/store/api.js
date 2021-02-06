@@ -3,7 +3,7 @@ import { GET, POST, PUT } from "../constants/HttpMethod.js";
 const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com/api";
 
 const option = (method, message = {}) => {
-  Object.values(message).length > 0
+  return Object.values(message).length > 0
     ? {
         method: method,
         headers: {
@@ -19,7 +19,8 @@ const option = (method, message = {}) => {
       };
 };
 
-const api = (method, url, message) => fetch(url, option(method, message))
+const api = async (method, url, message) =>
+  await fetch(url, option(method, message))
     .then((data) => {
       if (!data.ok) {
         throw new Error(data.status);
@@ -32,4 +33,5 @@ const api = (method, url, message) => fetch(url, option(method, message))
 
 export const repository = {
   getAllUsers: () => api(GET, `${BASE_URL}/users`),
+  addUser: (message) => api(POST, `${BASE_URL}/users`, message),
 };

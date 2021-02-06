@@ -5,13 +5,18 @@ const GET_USERS = "GET_USERS";
 const ADD_USER = "ADD_USER";
 
 export const getAllUsers = () => ({ type: GET_USERS });
+export const addUser = (name) => ({ type: ADD_USER, name: name });
 
 const initialState = [];
 
-function reducer(state = initialState, action) {
+async function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_USERS:
-      return repository.getAllUsers();
+      return await repository.getAllUsers();
+    case ADD_USER:
+      console.log(action);
+      await repository.addUser({ name: action.name });
+      return await repository.getAllUsers();
 
     default:
       return state;
