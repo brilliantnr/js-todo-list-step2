@@ -1,14 +1,9 @@
 import { FilterType, ProgressType } from "../constants/Types.js";
-import { store } from "../store/reducer.js";
+import { selectedUserstore } from "../store/reducer.js";
 
-const todoList = async (userId, selectedFiter = FilterType.ALL) => {
+const todoList = async (selectedFiter = FilterType.ALL) => {
   const $listUl = document.querySelector(".todo-list");
-  const state = await store.getState();
-  const userInfo = state.find((obj) => {
-    if (obj._id === userId) {
-      return true;
-    }
-  });
+  const userInfo = await selectedUserstore.getState();
   const showItems = userInfo.todoList;
 
   const render = () => {

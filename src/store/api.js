@@ -1,4 +1,4 @@
-import { GET, POST, PUT } from "../constants/HttpMethod.js";
+import { GET, POST, PUT, DELETE } from "../constants/HttpMethod.js";
 
 const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com/api";
 
@@ -19,8 +19,8 @@ const option = (method, message = {}) => {
       };
 };
 
-const api = async (method, url, message) =>
-  await fetch(url, option(method, message))
+const api = async (method, url, message) => {
+  return await fetch(url, option(method, message))
     .then((data) => {
       if (!data.ok) {
         throw new Error(data.status);
@@ -30,8 +30,10 @@ const api = async (method, url, message) =>
     .catch((error) => {
       console.log(error);
     });
+};
 
 export const repository = {
   getAllUsers: () => api(GET, `${BASE_URL}/users`),
   addUser: (message) => api(POST, `${BASE_URL}/users`, message),
+  deleteUser: (userId) => api(DELETE, `${BASE_URL}/users/${userId}`),
 };

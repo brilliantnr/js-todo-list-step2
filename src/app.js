@@ -1,4 +1,4 @@
-import user from "./containers/user.js";
+import user from "./containers/userContainer.js";
 import { getAllUsers, store } from "./store/reducer.js";
 
 const app = async () => {
