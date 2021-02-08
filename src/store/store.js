@@ -4,7 +4,7 @@ export default function createStore(initialState, reducer) {
   const listeners = [];
 
   const publish = () => {
-    listeners.forEach(({ subscriber }) => {
+    listeners.forEach((subscriber) => {
       subscriber.call();
     });
   };
@@ -16,7 +16,9 @@ export default function createStore(initialState, reducer) {
 
   const getState = () => state;
 
-  const subscribe = (subscriber) => listeners.push(subscriber);
+  const subscribe = (fn) => {
+    listeners.push(fn);
+  };
 
   return {
     dispatch,
