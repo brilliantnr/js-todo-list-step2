@@ -1,19 +1,18 @@
 import userList from "../components/UserList.js";
-import todoList from "../components/TodoList.js";
 import {
   addUser,
   deleteUser,
   getAllUsers,
   getSelectedUser,
   selectedUserstore,
+  store,
 } from "../store/reducer.js";
+import TodoContainer from "./todoContainer.js";
 
-export default async function user(store) {
+export default async function UserContainer() {
   const $userDiv = document.getElementById("user-list");
 
   await store.dispatch(getAllUsers());
-
-  await selectedUserstore.dispatch(getSelectedUser());
 
   const onClickAddUser = async (e) => {
     if (e.target.classList.contains("user-create-button")) {
@@ -33,9 +32,10 @@ export default async function user(store) {
       if (!deleteConfirm) {
         return;
       }
+
       const selectedUserInfo = await selectedUserstore.getState();
       const selectedUserId = selectedUserInfo._id;
-      await selectedUserstore.dispatch(deleteUser(selectedUserId));
+      await store.dispatch(deleteUser(selectedUserId));
       await store.dispatch(getAllUsers());
     }
   };
@@ -49,7 +49,7 @@ export default async function user(store) {
 
   const render = () => {
     userList();
-    todoList();
+    TodoContainer();
   };
 
   $userDiv.addEventListener("click", onClickAddUser);
