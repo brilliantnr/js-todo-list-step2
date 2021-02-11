@@ -1,6 +1,6 @@
 import { selectedUserstore, store } from "../store/reducer.js";
 
-export default async function userList() {
+export default async function UserList() {
   const $userDiv = document.getElementById("user-list");
 
   const state = await store.getState();

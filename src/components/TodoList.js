@@ -1,30 +1,44 @@
-import { FilterType, ProgressType } from "../constants/Types.js";
-import { selectedUserstore } from "../store/reducer.js";
+import { FilterType, ProgressType, PriorityType } from "../constants/Types.js";
+import { itemStore } from "../store/todoreducer.js";
 
-const TodoList = async (selectedFiter = FilterType.ALL) => {
+const TodoList = async (userId, selectedFiter = FilterType.ALL) => {
   const $listUl = document.querySelector(".todo-list");
-  const userInfo = await selectedUserstore.getState();
-  const showItems = userInfo.todoList;
+
+  const showItems = await itemStore.getState();
 
   const render = () => {
     if (showItems) {
       const itemList = showItems.map((obj) => {
         return `
-      <li id="${obj._id}" class="${
-          obj.isCompleted === false
-            ? obj.editFlag === false
-              ? ""
-              : ProgressType.EDITING
-            : ProgressType.COMPLETED
+        <li id="${obj._id}" class="${
+          obj.isCompleted ? ProgressType.COMPLETED : ""
         }">
-        <div class="view">
-          <input class="toggle" type="checkbox" ${
-            obj.isCompleted === true ? "checked" : ""
-          }/>
-          <label class="label">${obj.contents}</label>
-          <button class="destroy"></button>
-        </div>
-        <input class="edit" value=${obj.contents} />
+          <div class="view">
+            <input class="toggle" type="checkbox" ${
+              obj.isCompleted ? "checked" : ""
+            } />
+            <label class="label">
+              ${
+                obj.isCompleted
+                  ? ""
+                  : obj.priority === PriorityType.NONE
+                  ? `
+              <select class="chip select">
+                <option value="0" selected>순위</option>
+                <option value="1">1순위</option>
+                <option value="2">2순위</option>
+              </select>`
+                  : obj.priority === PriorityType.FIRST
+                  ? `<span class="chip primary">1순위</span>`
+                  : obj.priority === PriorityType.SECOND
+                  ? `<span class="chip secondary">2순위</span>`
+                  : ""
+              }
+              ${obj.contents}
+            </label>
+            <button class="destroy"></button>
+          </div>
+          <input class="edit" value=${obj.contents} />
       </li>`;
       });
       $listUl.innerHTML = itemList.join("");

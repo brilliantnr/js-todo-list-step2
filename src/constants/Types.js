@@ -8,3 +8,9 @@ export const FilterType = {
   ACTIVE: "active",
   COMPLETED: "completed",
 };
+
+export const PriorityType = {
+  NONE: "NONE",
+  FIRST: "FIRST",
+  SECOND: "SECOND",
+};
