@@ -1,4 +1,4 @@
-import userList from "../components/UserList.js";
+import UserList from "../components/UserList.js";
 import {
   addUser,
   deleteUser,
@@ -7,12 +7,10 @@ import {
   selectedUserstore,
   store,
 } from "../store/reducer.js";
-import TodoContainer from "./todoContainer.js";
+import TodoContainer from "./TodoContainer.js";
 
 export default async function UserContainer() {
   const $userDiv = document.getElementById("user-list");
-
-  await store.dispatch(getAllUsers());
 
   const onClickAddUser = async (e) => {
     if (e.target.classList.contains("user-create-button")) {
@@ -35,21 +33,30 @@ export default async function UserContainer() {
 
       const selectedUserInfo = await selectedUserstore.getState();
       const selectedUserId = selectedUserInfo._id;
+      await setSelectedUser(selectedUserId);
       await store.dispatch(deleteUser(selectedUserId));
       await store.dispatch(getAllUsers());
     }
   };
 
   const onClickSelectUser = (e) => {
-    const clickedUserId = e.target.dataset.userId;
-    if (clickedUserId) {
-      selectedUserstore.dispatch(getSelectedUser(clickedUserId));
+    if (e.target.classList.contains("ripple")) {
+      const clickedUserId = e.target.dataset.userId;
+      setSelectedUser(clickedUserId);
     }
   };
 
-  const render = () => {
-    userList();
-    TodoContainer();
+  const setSelectedUser = (userId) => {
+    selectedUserstore.dispatch(getSelectedUser(userId));
+    render();
+  };
+
+  const render = async () => {
+    const userInfo = await selectedUserstore.getState();
+    UserList();
+    if (Object.keys(userInfo).length > 0) {
+      TodoContainer();
+    }
   };
 
   $userDiv.addEventListener("click", onClickAddUser);
@@ -57,7 +64,7 @@ export default async function UserContainer() {
   $userDiv.addEventListener("click", onClickSelectUser);
 
   store.subscribe(render);
-  selectedUserstore.subscribe(render);
+  // selectedUserstore.subscribe(render);
 
   render();
 }
