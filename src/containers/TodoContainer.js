@@ -1,10 +1,11 @@
 import TodoList from "../components/TodoList.js";
 import { selectedUserstore } from "../store/reducer.js";
 import {
+  itemStore,
   addItem,
   getItems,
   updateCompleteToggle,
-  itemStore,
+  deleteItem,
 } from "../store/todoreducer.js";
 
 export default async function TodoContainer() {
@@ -30,7 +31,6 @@ export default async function TodoContainer() {
   };
 
   const onCompleteToggleHandler = async (e) => {
-    console.log(e.target.className);
     if (e.target.className === "toggle") {
       const userInfo = await selectedUserstore.getState();
       const userId = userInfo._id;
@@ -40,8 +40,19 @@ export default async function TodoContainer() {
     render();
   };
 
+  const onDestroyToggleHandler = async (e) => {
+    if (e.target.className === "destroy") {
+      const userInfo = await selectedUserstore.getState();
+      const userId = userInfo._id;
+      const itemId = e.target.closest("li").id;
+      itemStore.dispatch(deleteItem(userId, itemId));
+    }
+    render();
+  };
+
   const selectPriorityHandler = (e) => {
     console.log(e);
+    console.log(e.target.value);
   };
 
   const render = async () => {
@@ -58,4 +69,5 @@ export default async function TodoContainer() {
 
   $input.addEventListener("keypress", addTodoItemHandler);
   $listUl.addEventListener("click", onCompleteToggleHandler);
+  $listUl.addEventListener("click", onDestroyToggleHandler);
 }
