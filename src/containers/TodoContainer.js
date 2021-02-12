@@ -1,11 +1,15 @@
 import TodoList from "../components/TodoList.js";
 import { selectedUserstore } from "../store/reducer.js";
-import { addItem, getItems, itemStore } from "../store/todoreducer.js";
+import {
+  addItem,
+  getItems,
+  updateCompleteToggle,
+  itemStore,
+} from "../store/todoreducer.js";
 
 export default async function TodoContainer() {
   const $listUl = document.querySelector(".todo-list");
   const $input = document.querySelector(".new-todo");
-  const $prioritySelect = document.querySelector("select");
 
   // active user 찾기
   const userInfo = await selectedUserstore.getState();
@@ -25,6 +29,17 @@ export default async function TodoContainer() {
     render();
   };
 
+  const onCompleteToggleHandler = async (e) => {
+    console.log(e.target.className);
+    if (e.target.className === "toggle") {
+      const userInfo = await selectedUserstore.getState();
+      const userId = userInfo._id;
+      const itemId = e.target.closest("li").id;
+      itemStore.dispatch(updateCompleteToggle(userId, itemId));
+    }
+    render();
+  };
+
   const selectPriorityHandler = (e) => {
     console.log(e);
   };
@@ -34,7 +49,7 @@ export default async function TodoContainer() {
     const userId = userInfo._id;
     if (userId) {
       itemStore.dispatch(getItems(userId));
-      TodoList(userId);
+      await TodoList(userId);
     }
   };
 
@@ -42,5 +57,5 @@ export default async function TodoContainer() {
   render();
 
   $input.addEventListener("keypress", addTodoItemHandler);
-  $prioritySelect.addEventListener("change", selectPriorityHandler);
+  $listUl.addEventListener("click", onCompleteToggleHandler);
 }

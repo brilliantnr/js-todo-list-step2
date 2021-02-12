@@ -48,7 +48,8 @@ export const repository = {
   updateItem: ({ userId, itemId, message }) =>
     api(PUT, `${BASE_URL}/users/${userId}/items/${itemId}`, message),
 
-  updatePriority: () => api(GET, `${BASE_URL}/users`),
+  updatePriority: ({ userId, itemId, message }) =>
+    api(PUT, `${BASE_URL}/users/${userId}/items/${itemId}/priority`, message),
   updateCompleteToggle: ({ userId, itemId }) =>
-    api(PUT, `${BASE_URL}/users/${userId}/items/${itemId}`),
+    api(PUT, `${BASE_URL}/users/${userId}/items/${itemId}/toggle`),
 };
