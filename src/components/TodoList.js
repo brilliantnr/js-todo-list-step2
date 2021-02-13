@@ -1,17 +1,20 @@
 import { FilterType, ProgressType, PriorityType } from "../constants/Types.js";
-import { itemStore } from "../store/todoreducer.js";
 
-const TodoList = async (userId, selectedFiter = FilterType.ALL) => {
+const TodoList = async ({ todoItems, selectedFiter = FilterType.ALL }) => {
   const $listUl = document.querySelector(".todo-list");
 
-  const showItems = await itemStore.getState();
+  const showItems = todoItems;
 
   const render = () => {
     if (showItems) {
       const itemList = showItems.map((obj) => {
         return `
         <li id="${obj._id}" class="${
-          obj.isCompleted ? ProgressType.COMPLETED : ""
+          obj.isCompleted
+            ? ProgressType.COMPLETED
+            : obj.editFlag
+            ? ProgressType.EDITING
+            : ""
         }">
           <div class="view">
             <input class="toggle" type="checkbox" ${

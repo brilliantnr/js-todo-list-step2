@@ -8,6 +8,7 @@ export const DELETE_ITEM = "DELETE_ITEM";
 export const UPDATE_ITEM = "UPDATE_ITEM";
 export const UPDATE_PRIORITY = "UPDATE_PRIORITY";
 export const UPDATE_COMPETE_TOGGLE = "UPDATE_COMPETE_TOGGLE";
+export const EDIT_MODE = "EDIT_MODE";
 
 export const getItems = (userId) => ({
   type: GET_ITEMS,
@@ -46,17 +47,28 @@ export const updateCompleteToggle = (userId, itemId) => ({
   itemId: itemId,
 });
 
+export const editMode = (itemId) => ({
+  type: EDIT_MODE,
+  itemId: itemId,
+});
+
 const initialState = [];
 
 async function itemReducer(state = initialState, action) {
-  console.log(action);
   switch (action.type) {
     case GET_ITEMS:
       return await repository.getItems(action);
     case ADD_ITEM:
-      console.log(action);
       await repository.addItem(action);
       return await repository.getItems(action);
+    case EDIT_MODE:
+      const todoItems =await itemStore.getState();
+      const itemInfo = todoItems.find((info) => info._id === action.itemId);
+      const index = todoItems.indexOf(itemInfo);
+      todoItems.forEach((item, i) => {
+        todoItems[i].editFlag = i === index ? true : false;
+      });
+      return todoItems;
     case DELETE_ALL_ITEMS:
       repository.deleteAllItems(action);
       return repository.getItems(action);
