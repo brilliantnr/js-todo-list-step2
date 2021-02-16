@@ -1,3 +1,4 @@
+import TodoTitle from "../components/TodoTitle.js";
 import TodoList from "../components/TodoList.js";
 import TodoFilter from "../components/TodoFilter.js";
 import TodoPriority from "../components/TodoPriority.js";
@@ -109,6 +110,8 @@ export default async function TodoContainer() {
     await TodoFilter();
     const userInfo = await selectedUserstore.getState();
     const userId = userInfo._id;
+    const userName = userInfo.name || "";
+    await TodoTitle({ userName });
     if (userId) {
       await itemStore.dispatch(getItems(userId));
       const todoItems = await itemStore.getState();
