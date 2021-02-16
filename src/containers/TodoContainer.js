@@ -1,8 +1,7 @@
 import TodoTitle from "../components/TodoTitle.js";
 import TodoList from "../components/TodoList.js";
 import TodoFilter from "../components/TodoFilter.js";
-import TodoPriority from "../components/TodoPriority.js";
-import { selectedUserstore } from "../store/reducer.js";
+import { selectedUserstore } from "../store/userReducer.js";
 import {
   itemStore,
   addItem,
@@ -11,13 +10,14 @@ import {
   updateCompleteToggle,
   deleteItem,
   editMode,
-} from "../store/todoreducer.js";
+} from "../store/itemReducer.js";
 import { changeFilter, filterStore } from "../store/filterReducer.js";
 
 export default async function TodoContainer() {
   const $listUl = document.querySelector(".todo-list");
   const $input = document.querySelector(".new-todo");
   const $filters = document.querySelector(".filters");
+  const $clearItems = document.querySelector(".clear-completed");
 
   const addTodoItemHandler = async (e) => {
     const content = e.target.value.trim();
@@ -37,7 +37,6 @@ export default async function TodoContainer() {
       itemStore.dispatch(editMode(itemId));
       const todoItems = await itemStore.getState();
       await TodoList({ todoItems });
-      await TodoPriority({ selectPriorityHandler });
       onEditHandler();
     }
   };
@@ -116,12 +115,11 @@ export default async function TodoContainer() {
       await itemStore.dispatch(getItems(userId));
       const todoItems = await itemStore.getState();
       await TodoList({ todoItems });
-      await TodoPriority({ selectPriorityHandler });
     }
   };
 
   render();
-
+  
   $input.addEventListener("keypress", addTodoItemHandler);
   $listUl.addEventListener("click", onCompleteToggleHandler);
   $listUl.addEventListener("click", onDestroyToggleHandler);

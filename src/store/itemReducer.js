@@ -55,6 +55,7 @@ export const editMode = (itemId) => ({
 const initialState = [];
 
 async function itemReducer(state = initialState, action) {
+  console.log(action);
   switch (action.type) {
     case GET_ITEMS:
       return await repository.getItems(action);
@@ -79,6 +80,7 @@ async function itemReducer(state = initialState, action) {
       repository.updateItem(action);
       return repository.getItems(action);
     case UPDATE_PRIORITY:
+    console.log("UPDATE_PRIORITY");
       repository.updatePriority(action);
       return repository.getItems(action);
     case UPDATE_COMPETE_TOGGLE:

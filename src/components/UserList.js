@@ -1,4 +1,4 @@
-import { selectedUserstore, store } from "../store/reducer.js";
+import { selectedUserstore, store } from "../store/userReducer.js";
 
 export default async function UserList() {
   const $userDiv = document.getElementById("user-list");
