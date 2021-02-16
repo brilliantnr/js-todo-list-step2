@@ -1,4 +1,5 @@
 import TodoList from "../components/TodoList.js";
+import TodoFilter from "../components/TodoFilter.js";
 import TodoPriority from "../components/TodoPriority.js";
 import { selectedUserstore } from "../store/reducer.js";
 import {
@@ -10,10 +11,12 @@ import {
   deleteItem,
   editMode,
 } from "../store/todoreducer.js";
+import { changeFilter, filterStore } from "../store/filterReducer.js";
 
 export default async function TodoContainer() {
   const $listUl = document.querySelector(".todo-list");
   const $input = document.querySelector(".new-todo");
+  const $filters = document.querySelector(".filters");
 
   const addTodoItemHandler = async (e) => {
     const content = e.target.value.trim();
@@ -92,11 +95,18 @@ export default async function TodoContainer() {
     }
   };
 
+  const onClickFiltersHandler = (e) => {
+    const selectedFiter = e.target.className.split(" ")[0];
+    filterStore.dispatch(changeFilter(selectedFiter));
+    render();
+  };
+
   const selectPriorityHandler = (e) => {
     console.log(e);
   };
 
   const render = async () => {
+    await TodoFilter();
     const userInfo = await selectedUserstore.getState();
     const userId = userInfo._id;
     if (userId) {
@@ -113,4 +123,5 @@ export default async function TodoContainer() {
   $listUl.addEventListener("click", onCompleteToggleHandler);
   $listUl.addEventListener("click", onDestroyToggleHandler);
   $listUl.addEventListener("dblclick", onEditModeHandler);
+  $filters.addEventListener("click", onClickFiltersHandler);
 }

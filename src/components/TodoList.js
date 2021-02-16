@@ -1,9 +1,22 @@
 import { FilterType, ProgressType, PriorityType } from "../constants/Types.js";
+import { filterStore } from "../store/filterReducer.js";
 
-const TodoList = async ({ todoItems, selectedFiter = FilterType.ALL }) => {
+const TodoList = async ({ todoItems }) => {
   const $listUl = document.querySelector(".todo-list");
 
-  const showItems = todoItems;
+  const showItems = [...todoItems];
+
+  const { filter } = await filterStore.getState();
+
+  showItems.map((item, index) => {
+    if (filter === FilterType.ACTIVE && item.isCompleted) {
+      delete showItems[index];
+      return showItems;
+    } else if (filter === FilterType.COMPLETED && !item.isCompleted) {
+      delete showItems[index];
+      return showItems;
+    }
+  });
 
   const render = () => {
     if (showItems) {

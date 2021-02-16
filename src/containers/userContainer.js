@@ -52,11 +52,8 @@ export default async function UserContainer() {
   };
 
   const render = async () => {
-    const userInfo = await selectedUserstore.getState();
     UserList();
-    if (Object.keys(userInfo).length > 0) {
-      TodoContainer();
-    }
+    TodoContainer();
   };
 
   $userDiv.addEventListener("click", onClickAddUser);
@@ -64,7 +61,6 @@ export default async function UserContainer() {
   $userDiv.addEventListener("click", onClickSelectUser);
 
   store.subscribe(render);
-  // selectedUserstore.subscribe(render);
 
   render();
 }
